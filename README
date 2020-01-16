@@ -1,0 +1,45 @@
+Supersingular Isogeny Key Encapsulation: SIKEp751 & SIKEp503
+written in C language
+=======================================================================
+    
+This software library contains faster software implementation of the SIKE protocol based on a new data representation for SIKEp503 and SIKEp751. They can be found under "/src/P503_uRadix" and "/src/P751_uRadix", where the files for finite field arithmetic computing is compiled as object files.
+The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery reduction are also attached. They are under "/src/P503_Mont" and "/src/P751_Mont". 
+We can easily compare the two designs.
+
+* SIKEp503: matching the post-quantum security of SHA3-256 (level 2).
+* SIKEp751: matching the post-quantum security of AES256 (level 5).
+
+## Contents
+* [`KAT folder`](KAT/): Known Answer Test (KAT) files for the KEM.
+* [`src folder`](src/): C and header files.
+* [`random folder`](src/random/): randombytes function using the system random number generator.
+* [`sha3 folder`](src/sha3/): SHAKE256 implementation.  
+* [`Test folder`](tests/): test files.   
+* [`referred implementation for p751 base on the Montgomery reduction`](src/P751_Mont/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on the Montgomery reduction.
+* [`referred implementation for p503 base on the Montgomery reduction`](src/P503_Mont/P503/generic/): implementation of the field arithmetic over the prime p503 in portable C based on the Montgomery reduction.
+
+
+* [`proposed implementation for p503 base on a new data representation`](src/P503_uRadix/P503/generic/): implementation of the field arithmetic over the prime p503 in portable C based on a new data representation.
+* [`proposed implementation for p751 base on a new data representation`](src/P751_uRadix/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on a new data representation.
+
+
+## Instructions for Linux
+
+Simply do:
+
+$ make clean; make
+
+And then execute the following to run the tests:
+
+$ cd sike;
+
+$ ./test_KEM_P503_Mont
+$ ./test_KEM_P751_Mont
+$ ./test_KEM_P503_uRadix
+$ ./test_KEM_P751_uRadix
+
+$ ./PQCtestKAT_kem_P503_Mont
+$ ./PQCtestKAT_kem_P751_Mont
+$ ./PQCtestKAT_kem_P503_uRadix
+$ ./PQCtestKAT_kem_P751_uRadix
+
