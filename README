@@ -2,7 +2,7 @@ Supersingular Isogeny Key Encapsulation: SIKEp751 & SIKEp503
 written in C language
 =======================================================================
     
-This software library contains faster software implementation of the SIKE protocol based on a new data representation for SIKEp503 and SIKEp751. They can be found under "/src/P503_uRadix" and "/src/P751_uRadix", where the files for finite field arithmetic computing is compiled as object files.
+This software library contains faster software implementation of the SIKE protocol based on a new data representation for SIKEp503 and SIKEp751. They can be found under "/src/P503_uRadix" and "/src/P751_uRadix", where the files for finite field arithmetic computing are compiled as object files.
 The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery reduction are also attached. They are under "/src/P503_Mont" and "/src/P751_Mont". 
 
 * SIKEp503: matching the post-quantum security of SHA3-256 (level 2).
@@ -11,7 +11,7 @@ The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery r
 ## Contents
 * [`KAT folder`](KAT/): Known Answer Test (KAT) files for the KEM.
 * [`src folder`](src/): C and header files.
-* [`random folder`](src/random/): randombytes function using the system random number generator.
+* [`random folder`](src/random/): random bytes function using the system random number generator.
 * [`sha3 folder`](src/sha3/): SHAKE256 implementation.  
 * [`Test folder`](tests/): test files.   
 * [`referred implementation for p751 base on the Montgomery reduction`](src/P751_Mont/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on the Montgomery reduction.
@@ -22,23 +22,15 @@ The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery r
 * [`proposed implementation for p751 base on a new data representation`](src/P751_uRadix/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on a new data representation.
 
 
-## Instructions for Linux
-
-First 
-
+## Instructions for Linux (64-bit operating system)
+1.
 $ cd generic-master
-
-then
-
+2.
 $ make clean
-
-And then
-
+3.
 $ make
-
-And then execute the following to run the tests:
-
-$ cd sike;
+4.
+$ cd sike
 
 Testing and benchmarking results are obtained by running:
 
@@ -55,158 +47,45 @@ $ ./PQCtestKAT_kem_P751_Mont
 $ ./PQCtestKAT_kem_P503_uRadix
 $ ./PQCtestKAT_kem_P751_uRadix
 
-
-## our results (for example)
-
-example (1): On the Intel(R) Xeon(R) CPU E5-2690 @ 2.90GHz, 20M Cache processor. TurboBoost was opened during the test.
-             Our test get the following benchmark results:
-
-$ cd generic-master
-$ make clean
-$ make
-$ cd sike;
-
+## Example results on the Intel(R) Xeon(R) CPU E5-2690@ 2.90GHz
+1) Turbo Boost option enabled: 
 $ ./test_KEM_P503_Mont
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
-  Key generation runs in .......................................   73816642 cycles
+ Key generation runs in .......................................   73816642 cycles
   Encapsulation runs in ........................................  121483426 cycles
   Decapsulation runs in ........................................  129259946 cycles
 
 $ ./test_KEM_P751_Mont
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................  245653386 cycles
   Encapsulation runs in ........................................  397869294 cycles
   Decapsulation runs in ........................................  427726136 cycles
 
-
-
 $ ./test_KEM_P503_uRadix
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................   45897223 cycles
   Encapsulation runs in ........................................   75571021 cycles
   Decapsulation runs in ........................................   80340201 cycles
 
-
 $ ./test_KEM_P751_uRadix
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................  148631395 cycles
   Encapsulation runs in ........................................  241185435 cycles
   Decapsulation runs in ........................................  258675116 cycles
 
-
-
-
-
-example (2): On the same Intel(R) Xeon(R) CPU E5-2690 @ 2.90GHz, 20M Cache processor. TurboBoost was disabled during the test.
-             Our test get the following benchmark results:
-
-$ cd generic-master
-$ make clean
-$ make
-$ cd sike;
-
+2) Turbo Boost option disabled:
 $ ./test_KEM_P503_Mont
-
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................   99349280 cycles
   Encapsulation runs in ........................................  163598002 cycles
   Decapsulation runs in ........................................  174144615 cycles
 
-
-
 $ ./test_KEM_P751_Mont
-
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................  330359813 cycles
   Encapsulation runs in ........................................  534684859 cycles
   Decapsulation runs in ........................................  574877203 cycles
 
-
-
 $ ./test_KEM_P503_uRadix
-
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp503
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................   61784626 cycles
   Encapsulation runs in ........................................  101787564 cycles
   Decapsulation runs in ........................................  108103000 cycles
 
-
-
 $ ./test_KEM_P751_uRadix
-
-
-TESTING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
-  KEM tests .................................................... PASSED
-
-
-BENCHMARKING ISOGENY-BASED KEY ENCAPSULATION MECHANISM SIKEp751
---------------------------------------------------------------------------------------------------------
-
   Key generation runs in .......................................  199942406 cycles
   Encapsulation runs in ........................................  324438988 cycles
   Decapsulation runs in ........................................  347941364 cycles
