@@ -48,28 +48,8 @@ $ ./PQCtestKAT_kem_P503_uRadix
 $ ./PQCtestKAT_kem_P751_uRadix
 
 ## Example results on the Intel(R) Xeon(R) CPU E5-2690@ 2.90GHz
-1) Turbo Boost option enabled: 
-$ ./test_KEM_P503_Mont
-  Key generation runs in .......................................   73816642 cycles
-  Encapsulation runs in ........................................  121483426 cycles
-  Decapsulation runs in ........................................  129259946 cycles
 
-$ ./test_KEM_P751_Mont
-  Key generation runs in .......................................  245653386 cycles
-  Encapsulation runs in ........................................  397869294 cycles
-  Decapsulation runs in ........................................  427726136 cycles
-
-$ ./test_KEM_P503_uRadix
-  Key generation runs in .......................................   45897223 cycles
-  Encapsulation runs in ........................................   75571021 cycles
-  Decapsulation runs in ........................................   80340201 cycles
-
-$ ./test_KEM_P751_uRadix
-  Key generation runs in .......................................  148631395 cycles
-  Encapsulation runs in ........................................  241185435 cycles
-  Decapsulation runs in ........................................  258675116 cycles
-
-2) Turbo Boost option disabled:
+Turbo Boost option disabled:
 $ ./test_KEM_P503_Mont
   Key generation runs in .......................................   99349280 cycles
   Encapsulation runs in ........................................  163598002 cycles
