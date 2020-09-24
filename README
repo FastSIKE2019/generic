@@ -1,11 +1,13 @@
-Supersingular Isogeny Key Encapsulation: SIKEp751 & SIKEp503
+Supersingular Isogeny Key Encapsulation: SIKEp751 & SIKEp610 & SIKEp503 & SIKEp434
 written in C language
 =======================================================================
     
-This software library contains faster software implementation of the SIKE protocol based on a new data representation for SIKEp503 and SIKEp751. They can be found under "/src/P503_uRadix" and "/src/P751_uRadix", where the files for finite field arithmetic computing are compiled as object files.
-The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery reduction are also attached. They are under "/src/P503_Mont" and "/src/P751_Mont". 
+This software library contains faster software implementation of the SIKE protocol based on a new data representation for SIKEp434, SIKEp503, SIKEp610, SIKEp751. They can be found under "/src/P434_uRadix", "/src/P503_uRadix", "/src/P610_uRadix", "/src/P751_uRadix", where the files for finite field arithmetic computing are compiled as object files.
+The referred implementations for SIKEp434, SIKEp503, SIKEp610, SIKEp751 based on the Montgomery reduction are also attached. They are under "/src/P434_Mont", "/src/P503_Mont", "/src/P610_Mont", "/src/P751_Mont". 
 
+* SIKEp434: matching the post-quantum security of AES128 (level 1).
 * SIKEp503: matching the post-quantum security of SHA3-256 (level 2).
+* SIKEp610: matching the post-quantum security of AES192 (level 3).
 * SIKEp751: matching the post-quantum security of AES256 (level 5).
 
 ## Contents
@@ -15,12 +17,14 @@ The referred implementations for SIKEp503 and SIKEp751 based on the Montgomery r
 * [`sha3 folder`](src/sha3/): SHAKE256 implementation.  
 * [`Test folder`](tests/): test files.   
 * [`referred implementation for p751 base on the Montgomery reduction`](src/P751_Mont/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on the Montgomery reduction.
+* [`referred implementation for p610 base on the Montgomery reduction`](src/P610_Mont/P610/generic/): implementation of the field arithmetic over the prime p610 in portable C based on the Montgomery reduction.
 * [`referred implementation for p503 base on the Montgomery reduction`](src/P503_Mont/P503/generic/): implementation of the field arithmetic over the prime p503 in portable C based on the Montgomery reduction.
+* [`referred implementation for p434 base on the Montgomery reduction`](src/P434_Mont/P434/generic/): implementation of the field arithmetic over the prime p434 in portable C based on the Montgomery reduction.
 
-
-* [`proposed implementation for p503 base on a new data representation`](src/P503_uRadix/P503/generic/): implementation of the field arithmetic over the prime p503 in portable C based on a new data representation.
 * [`proposed implementation for p751 base on a new data representation`](src/P751_uRadix/P751/generic/): implementation of the field arithmetic over the prime p751 in portable C based on a new data representation.
-
+* [`proposed implementation for p610 base on a new data representation`](src/P610_uRadix/P610/generic/): implementation of the field arithmetic over the prime p610 in portable C based on a new data representation.
+* [`proposed implementation for p503 base on a new data representation`](src/P503_uRadix/P503/generic/): implementation of the field arithmetic over the prime p503 in portable C based on a new data representation.
+* [`proposed implementation for p434 base on a new data representation`](src/P434_uRadix/P434/generic/): implementation of the field arithmetic over the prime p434 in portable C based on a new data representation.
 
 ## Instructions for Linux (64-bit operating system)
 1.
@@ -34,36 +38,65 @@ $ cd sike
 
 Testing and benchmarking results are obtained by running:
 
+$ ./test_KEM_P434_Mont
 $ ./test_KEM_P503_Mont
+$ ./test_KEM_P610_Mont
 $ ./test_KEM_P751_Mont
+$ ./test_KEM_P434_uRadix
 $ ./test_KEM_P503_uRadix
+$ ./test_KEM_P610_uRadix
 $ ./test_KEM_P751_uRadix
 
 To run the implementations against the KATs provided in the KAT folder,
 execute:
 
+$ ./PQCtestKAT_kem_P434_Mont
 $ ./PQCtestKAT_kem_P503_Mont
+$ ./PQCtestKAT_kem_P610_Mont
 $ ./PQCtestKAT_kem_P751_Mont
+$ ./PQCtestKAT_kem_P434_uRadix
 $ ./PQCtestKAT_kem_P503_uRadix
+$ ./PQCtestKAT_kem_P610_uRadix
 $ ./PQCtestKAT_kem_P751_uRadix
 
 ## Example results on the Intel(R) Xeon(R) CPU E5-2690@ 2.90GHz
 
 Turbo Boost option disabled:
+
+$ ./test_KEM_P434_Mont
+  Key generation runs in .......................................   66056313 cycles
+  Encapsulation runs in ........................................  106052319 cycles
+  Decapsulation runs in ........................................  113185503 cycles
+
 $ ./test_KEM_P503_Mont
   Key generation runs in .......................................   99349280 cycles
   Encapsulation runs in ........................................  163598002 cycles
   Decapsulation runs in ........................................  174144615 cycles
+  
+$ ./test_KEM_P610_Mont
+  Key generation runs in .......................................  186213290 cycles
+  Encapsulation runs in ........................................  342070689 cycles
+  Decapsulation runs in ........................................  344433945 cycles
 
 $ ./test_KEM_P751_Mont
   Key generation runs in .......................................  330359813 cycles
   Encapsulation runs in ........................................  534684859 cycles
   Decapsulation runs in ........................................  574877203 cycles
 
+$ ./test_KEM_P434_uRadix
+  Key generation runs in .......................................   44205016 cycles
+  Encapsulation runs in ........................................   71809157 cycles
+  Decapsulation runs in ........................................   76820145 cycles
+
 $ ./test_KEM_P503_uRadix
   Key generation runs in .......................................   61784626 cycles
   Encapsulation runs in ........................................  101787564 cycles
   Decapsulation runs in ........................................  108103000 cycles
+  
+$ ./test_KEM_P610_uRadix
+  Key generation runs in .......................................   92155578 cycles
+  Encapsulation runs in ........................................  168786347 cycles
+  Decapsulation runs in ........................................  170012117 cycles
 
 $ ./test_KEM_P751_uRadix
   Key generation runs in .......................................  199942406 cycles
