@@ -11,7 +11,7 @@
  
 
 #if (TARGET == TARGET_AMD64)
-    #define NWORDS_FIELD    6     //7->6          // Number of words of a 434-bit field element
+    #define NWORDS_FIELD    6               // Number of words of a 434-bit field element
     #define p434_ZERO_WORDS 3               // Number of "0" digits in the least significant part of p434 + 1     
 #elif (TARGET == TARGET_x86)
     #define NWORDS_FIELD    14 
@@ -63,7 +63,7 @@ typedef digit_t felm_t[NWORDS_FIELD];                                 // Datatyp
 typedef digit_t dfelm_t[2*NWORDS_FIELD];                              // Datatype for representing double-precision 2x434-bit field elements (448-bit max.) 
 typedef felm_t  f2elm_t[2];                                           // Datatype for representing quadratic extension field elements GF(p434^2)
         
-typedef struct {f2elm_t X; f2elm_t Xi; f2elm_t Z; f2elm_t Zi;} point_proj;                  // Point representation in projective XZ Montgomery coordinates.
+typedef struct {f2elm_t X; f2elm_t Xi; f2elm_t Z; f2elm_t Zi;} point_proj;                  
 typedef point_proj point_proj_t[1]; 
 
 typedef digit_t normal_t[7];
@@ -85,75 +85,75 @@ void mp_mul_old(const digit_t* a, const digit_t* b, digit_t* c, const unsigned i
 /************ Field arithmetic functions *************/
 
 // Copy of a field element, c = a
-void fpcopy610(const digit_t* a, digit_t* c);
+void fpcopy434(const digit_t* a, digit_t* c);
 
 // Zeroing a field element, a = 0
-void fpzero610(digit_t* a);
+void fpzero434(digit_t* a);
 
-// Modular addition, c = a+b mod p610
+//Modular Addition based on the new data representation , with the unconditional radix
 extern void fp_add_new(digit_t* a1, digit_t* a0, digit_t* b1, digit_t* b0, digit_t* c0, digit_t* c1);
 
-// Modular subtraction, c = a-b mod p610
+//Modular Subtraction based on the new data representation , with the unconditional radix
 extern void fpsub_new(digit_t* a1, digit_t* a0, digit_t* b1, digit_t* b0, digit_t* c0, digit_t* c1);
 
-// Modular negation, a = -a mod p610        
+//Modular Negation based on the new data representation , with the unconditional radix  
 extern void fpneg_new(digit_t* a1, digit_t* a0, digit_t* b0, digit_t* b1);  
 
-// Modular division by two, c = a/2 mod p610.
-void fpdiv2_610_new(digit_t* a1, digit_t* a0, digit_t* c0, digit_t* c1);
+//Modular Division by Two based on the new data representation , with the unconditional radix
+void fpdiv2_434_new(digit_t* a1, digit_t* a0, digit_t* c0, digit_t* c1);
 
-// Field multiplication using Montgomery arithmetic, c = a*b*R^-1 mod p610, where R=2^640
+//Modular Multipication based on the new data representation , with the unconditional radix
 void fpmul( digit_t* a1,  digit_t* a0,  digit_t* b1,  digit_t* b0, digit_t* d0, digit_t* d1);
    
-// Field squaring using Montgomery arithmetic, c = a*b*R^-1 mod p610, where R=2^640
+// Field squaring using uRadix arithmetic
 void fpsqr( digit_t* a1,  digit_t* a0, digit_t* d0, digit_t* d1);
 
-// Conversion to Montgomery representation
+// Conversion to uRadix representation
 void to_uRadix(digit_t* a, digit_t* c0, digit_t* c1);
     
-// Conversion from Montgomery representation to standard representation
+// Conversion from uRadix representation to standard representation
 void from_uRadix(digit_t* a1, digit_t* a0, digit_t* co);
 
-// Field inversion, a = a^-1 in GF(p610)
+// Field inversion, a = a^-1 in GF(p434)
 void fpinv_new_u(digit_t* a1, digit_t* a0, digit_t* c0, digit_t* c1);
 
-// Chain to compute (p610-3)/4 using Montgomery arithmetic
+
 void fpinv_chain_new_u(digit_t* a1, digit_t* a0, digit_t* c0, digit_t* c1);
 
 /************ GF(p^2) arithmetic functions *************/
     
-// Copy of a GF(p610^2) element, c = a
-void fp2copy610(const f2elm_t a, f2elm_t c);
+// Copy of a GF(p434^2) element, c = a
+void fp2copy434(const f2elm_t a, f2elm_t c);
 
-// Zeroing a GF(p610^2) element, a = 0
-void fp2zero610(f2elm_t a);
+// Zeroing a GF(p434^2) element, a = 0
+void fp2zero434(f2elm_t a);
 
-// GF(p610^2) negation, a = -a in GF(p610^2)
+// GF(p434^2) negation, a = -a in GF(p434^2)
 void fp2neg_new(f2elm_t a, f2elm_t ai, f2elm_t b, f2elm_t bi);
 
-// GF(p610^2) addition, c = a+b in GF(p610^2)
+// GF(p434^2) addition, c = a+b in GF(p434^2)
 extern void fp2add_new(f2elm_t a, f2elm_t ai, f2elm_t b, f2elm_t bi, f2elm_t c, f2elm_t ci);           
 
-// GF(p610^2) subtraction, c = a-b in GF(p610^2)
+// GF(p434^2) subtraction, c = a-b in GF(p434^2)
 extern void fp2sub_new(f2elm_t a, f2elm_t ai, f2elm_t b, f2elm_t bi, f2elm_t c, f2elm_t ci); 
 
-// GF(p610^2) division by two, c = a/2  in GF(p610^2) 
+// GF(p434^2) division by two, c = a/2  in GF(p434^2) 
 void fp2div2(const f2elm_t a, const f2elm_t ai, f2elm_t c, f2elm_t ci) ;
 
             
-// GF(p610^2) squaring using Montgomery arithmetic, c = a^2 in GF(p610^2)
+// GF(p434^2) squaring using arithmetic, c = a^2 in GF(p434^2)
 void fp2sqr_uRadix(f2elm_t a, f2elm_t ai, f2elm_t c, f2elm_t ci);
  
-// GF(p610^2) multiplication using Montgomery arithmetic, c = a*b in GF(p610^2)
+// GF(p434^2) multiplication using arithmetic, c = a*b in GF(p434^2)
 void fp2mul_uRadix(f2elm_t a, f2elm_t ai, f2elm_t b, f2elm_t bi, f2elm_t c, f2elm_t ci);
     
-// Conversion of a GF(p610^2) element to Montgomery representation
+// Conversion of a GF(p434^2) element to uRadix representation
 void to_fp2uRadix(const normal2_t a, f2elm_t mc, f2elm_t mci);
 
-// Conversion of a GF(p610^2) element from Montgomery representation to standard representation
+// Conversion of a GF(p434^2) element from uRadix representation to standard representation
 void from_fp2uRadix(const f2elm_t a, const f2elm_t ai, normal2_t c);
 
-// GF(p610^2) inversion using Montgomery arithmetic, a = (a0-i*a1)/(a0^2+a1^2)
+// GF(p434^2) inversion, a = (a0-i*a1)/(a0^2+a1^2)
 void fp2inv_uRadix(f2elm_t a, f2elm_t ai);
 
 /************ Elliptic curve and isogeny functions *************/
@@ -164,34 +164,31 @@ void j_inv(const f2elm_t A, const f2elm_t Ai, const f2elm_t C, const f2elm_t Ci,
 // Simultaneous doubling and differential addition.
 void xDBLADD(point_proj_t P, point_proj_t Q, const f2elm_t xPQ, const f2elm_t xPQi, const f2elm_t A24, const f2elm_t A24i);
 
-// Doubling of a Montgomery point in projective coordinates (X:Z).
+// Doubling of a point in projective coordinates (X:Z).
 void xDBL(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2elm_t A24plusi, const f2elm_t C24, const f2elm_t C24i);
 
 // Computes [2^e](X:Z) on Montgomery curve with projective constant via e repeated doublings.
 void xDBLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2elm_t A24plusi, const f2elm_t C24, const f2elm_t C24i, const int e);
 
-// Differential addition.
-//void xADD(point_proj_t P, const point_proj_t Q, const f2elm_t xPQ);
-
-// Computes the corresponding 2-isogeny of a projective Montgomery point (X2:Z2) of order 2.
+// Computes the corresponding 2-isogeny of a projective point (X2:Z2) of order 2.
 void get_2_isog(const point_proj_t P, f2elm_t A, f2elm_t Ai, f2elm_t C, f2elm_t Ci);
 
 // Evaluates the isogeny at the point (X:Z) in the domain of the isogeny.
 void eval_2_isog(point_proj_t P, point_proj_t Q);
 
-// Computes the corresponding 4-isogeny of a projective Montgomery point (X4:Z4) of order 4.
+// Computes the corresponding 4-isogeny of a projective point (X4:Z4) of order 4.
 void get_4_isog(const point_proj_t P, f2elm_t A24plus, f2elm_t A24plusi, f2elm_t C24, f2elm_t C24i, f2elm_t* coeff);
 
 // Evaluates the isogeny at the point (X:Z) in the domain of the isogeny.
 void eval_4_isog(point_proj_t P, f2elm_t* coeff);
 
-// Tripling of a Montgomery point in projective coordinates (X:Z).
+// Tripling of a point in projective coordinates (X:Z).
 void xTPL(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f2elm_t A24minusi, const f2elm_t A24plus, const f2elm_t A24plusi)  ;
 
 // Computes [3^e](X:Z) on Montgomery curve with projective constant via e repeated triplings.
 void xTPLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f2elm_t A24minusi, const f2elm_t A24plus, const f2elm_t A24plusi, const int e);
 
-// Computes the corresponding 3-isogeny of a projective Montgomery point (X3:Z3) of order 3.
+// Computes the corresponding 3-isogeny of a projective point (X3:Z3) of order 3.
 void get_3_isog(const point_proj_t P, f2elm_t A24minus, f2elm_t A24minusi, f2elm_t A24plus, f2elm_t A24plusi, f2elm_t* coeff);
 
 // Computes the 3-isogeny R=phi(X:Z), given projective point (X3:Z3) of order 3 on a Montgomery curve and a point P with coefficients given in coeff.

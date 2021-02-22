@@ -6,9 +6,9 @@
 
 
 void xDBL(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2elm_t A24plusi, const f2elm_t C24, const f2elm_t C24i)
-{ // Doubling of a Montgomery point in projective coordinates (X:Z).
-  // Input: projective Montgomery x-coordinates P = (X1:Z1), where x1=X1/Z1 and Montgomery curve constants A+2C and 4C.
-  // Output: projective Montgomery x-coordinates Q = 2*P = (X2:Z2).
+{// Coordinate doubling in projective coordinates (X:Z).
+ // Input: projective x-coordinates P = (X1:Z1) in the new data representation based on the unconventional radix, where x1=X1/Z1 and Montgomery curve constants A+2C and 4C.
+ // Output: projective x-coordinates Q = 2*P = (X2:Z2) in the new data representation based on the unconventional radix.
     f2elm_t t0, t1, t2, t3;
     
     fp2sub_new(P->X, P->Xi, P->Z, P->Zi, t0, t1);        // t0  t1->i
@@ -25,9 +25,9 @@ void xDBL(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2e
 
 
 void xDBLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2elm_t A24plusi, const f2elm_t C24, const f2elm_t C24i, const int e)
-{ // Computes [2^e](X:Z) on Montgomery curve with projective constant via e repeated doublings.
-  // Input: projective Montgomery x-coordinates P = (XP:ZP), such that xP=XP/ZP and Montgomery curve constants A+2C and 4C.
-  // Output: projective Montgomery x-coordinates Q <- (2^e)*P.
+{// Computes [2^e](X:Z) on Montgomery curve with projective constant via a repeated doublings.
+ // Input: projective x-coordinates P = (XP:ZP) in the new data representation, such that xP=XP/ZP and Montgomery curve constants A+2C and 4C.
+ // Output: projective x-coordinates Q <- (2^e)*P in the new data representation .
     int i;
     
     copy_words((digit_t*)P, (digit_t*)Q, 2*2*2*NWORDS_FIELD);
@@ -40,9 +40,9 @@ void xDBLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24plus, const f2
 #if (OALICE_BITS % 2 == 1)
 
 void get_2_isog(const point_proj_t P, f2elm_t A, f2elm_t Ai, f2elm_t C, f2elm_t Ci)
-{ // Computes the corresponding 2-isogeny of a projective Montgomery point (X2:Z2) of order 2.
-  // Input:  projective point of order two P = (X2:Z2).
-  // Output: the 2-isogenous Montgomery curve with projective coefficients A/C.
+{// Computes the corresponding 2-isogeny of a projective point (X2:Z2) of order 2.
+ // Input:  projective point of order two P = (X2:Z2) in the new data representation based on the unconventional radix.
+ // Output: the 2-isogenous Montgomery curve with projective coefficients A/C.
     
     fp2sqr_uRadix(P->X, P->Xi, A, Ai);                           // A = X2^2
     fp2sqr_uRadix(P->Z, P->Zi, C, Ci);                           // C = Z2^2
@@ -51,9 +51,9 @@ void get_2_isog(const point_proj_t P, f2elm_t A, f2elm_t Ai, f2elm_t C, f2elm_t 
 
 
 void eval_2_isog(point_proj_t P, point_proj_t Q)
-{ // Evaluates the isogeny at the point (X:Z) in the domain of the isogeny, given a 2-isogeny phi.
-  // Inputs: the projective point P = (X:Z) and the 2-isogeny kernel projetive point Q = (X2:Z2).
-  // Output: the projective point P = phi(P) = (X:Z) in the codomain. 
+{// Evaluates the isogeny at the point (X:Z) in the domain of the isogeny, given a 2-isogeny phi.
+ // Inputs: the projective point P = (X:Z) and the 2-isogeny kernel projetive point Q = (X2:Z2) in the new data representation based on the unconventional radix.
+ // Output: the projective point P = phi(P) = (X:Z) in the new data representation based on the unconventional radix. 
     f2elm_t t0, t1, t2, t3, t4, t5, t6, t7;
     
     fp2add_new(Q->X, Q->Xi, Q->Z, Q->Zi, t0, t1);      // t0 t1->i = X2+Z2
@@ -71,10 +71,10 @@ void eval_2_isog(point_proj_t P, point_proj_t Q)
 #endif
 
 void get_4_isog(const point_proj_t P, f2elm_t A24plus, f2elm_t A24plusi, f2elm_t C24, f2elm_t C24i, f2elm_t* coeff)
-{ // Computes the corresponding 4-isogeny of a projective Montgomery point (X4:Z4) of order 4.
-  // Input:  projective point of order four P = (X4:Z4).
-  // Output: the 4-isogenous Montgomery curve with projective coefficients A+2C/4C and the 3 coefficients 
-  //         that are used to evaluate the isogeny at a point in eval_4_isog().
+{// Computes the corresponding 4-isogeny of a projective point (X4:Z4) of order 4.
+ // Input: projective point of order four P = (X4:Z4) in the new data representation based on the unconventional radix.
+ // Output: the 4-isogenous Montgomery curve with projective coefficients A+2C/4C and the 3 coefficients 
+ //         that are used to evaluate the isogeny at a point in eval_4_isog().
     
     fp2sub_new(P->X, P->Xi, P->Z, P->Zi, coeff[2], coeff[3]);         // coeff[1] = X4-Z4
     fp2add_new(P->X, P->Xi, P->Z, P->Zi, coeff[4], coeff[5]);         // coeff[2] = X4+Z4
@@ -89,10 +89,10 @@ void get_4_isog(const point_proj_t P, f2elm_t A24plus, f2elm_t A24plusi, f2elm_t
 
 
 void eval_4_isog(point_proj_t P, f2elm_t* coeff)
-{ // Evaluates the isogeny at the point (X:Z) in the domain of the isogeny, given a 4-isogeny phi defined 
-  // by the 3 coefficients in coeff (computed in the function get_4_isog()).
-  // Inputs: the coefficients defining the isogeny, and the projective point P = (X:Z).
-  // Output: the projective point P = phi(P) = (X:Z) in the codomain. 
+{// Evaluates the isogeny at the point (X:Z) in the domain of the isogeny, given a 4-isogeny phi defined 
+ // by the 3 coefficients in coeff (computed in the function get_4_isog()).
+ // Inputs: the coefficients defining the isogeny, and the projective point P = (X:Z).
+ // Output: the projective point P = phi(P) = (X:Z) in the new data representation based on the unconventional radix. 
     f2elm_t t0, t1, t2, t3;
     
     fp2add_new(P->X, P->Xi, P->Z, P->Zi, t0, t1);              // t0 = X+Z
@@ -113,9 +113,9 @@ void eval_4_isog(point_proj_t P, f2elm_t* coeff)
 
 
 void xTPL(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f2elm_t A24minusi, const f2elm_t A24plus, const f2elm_t A24plusi)              
-{ // Tripling of a Montgomery point in projective coordinates (X:Z).
-  // Input: projective Montgomery x-coordinates P = (X:Z), where x=X/Z and Montgomery curve constants A24plus = A+2C and A24minus = A-2C.
-  // Output: projective Montgomery x-coordinates Q = 3*P = (X3:Z3).
+{// Coordinate Tripling in projective coordinates (X:Z).
+ // Input: projective x-coordinates P = (X:Z), where x=X/Z and Montgomery curve constants A24plus = A+2C and A24minus = A-2C.
+ // Output: projective x-coordinates Q = 3*P = (X3:Z3) in the new data representation based on the unconventional radix.
     f2elm_t t0, t1, t2, t3, t4, t5, t6;
 	f2elm_t t7, t8, t9, t10, t11, t12, t13;
                                     
@@ -145,9 +145,9 @@ void xTPL(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f2
 
 
 void xTPLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f2elm_t A24minusi, const f2elm_t A24plus, const f2elm_t A24plusi, const int e)
-{ // Computes [3^e](X:Z) on Montgomery curve with projective constant via e repeated triplings.
-  // Input: projective Montgomery x-coordinates P = (XP:ZP), such that xP=XP/ZP and Montgomery curve constants A24plus = A+2C and A24minus = A-2C.
-  // Output: projective Montgomery x-coordinates Q <- (3^e)*P.
+{// Computes [3^e](X:Z) on Montgomery curve with projective constant via a repeated triplings.
+ // Input: projective x-coordinates P = (XP:ZP), such that xP=XP/ZP and Montgomery curve constants A24plus = A+2C and A24minus = A-2C.
+ // Output: projective x-coordinates Q <- (3^e)*P in the new data representation based on the unconventional radix.
     int i;
         
     copy_words((digit_t*)P, (digit_t*)Q, 2*2*2*NWORDS_FIELD);
@@ -159,9 +159,9 @@ void xTPLe(const point_proj_t P, point_proj_t Q, const f2elm_t A24minus, const f
 
 
 void get_3_isog(const point_proj_t P, f2elm_t A24minus, f2elm_t A24minusi, f2elm_t A24plus, f2elm_t A24plusi, f2elm_t* coeff)
-{ // Computes the corresponding 3-isogeny of a projective Montgomery point (X3:Z3) of order 3.
-  // Input:  projective point of order three P = (X3:Z3).
-  // Output: the 3-isogenous Montgomery curve with projective coefficient A/C. 
+{// Computes the corresponding 3-isogeny of a projective point (X3:Z3) of order 3.
+ // Input:  projective point of order three P = (X3:Z3) in the new data representation based on the unconventional radix.
+ // Output: the 3-isogenous Montgomery curve with projective coefficient A/C. 
     f2elm_t t0, t1, t2, t3, t4;
 	f2elm_t t5, t6, t7, t8, t9;
     
@@ -187,10 +187,10 @@ void get_3_isog(const point_proj_t P, f2elm_t A24minus, f2elm_t A24minusi, f2elm
 
 
 void eval_3_isog(point_proj_t Q, const f2elm_t* coeff)
-{ // Computes the 3-isogeny R=phi(X:Z), given projective point (X3:Z3) of order 3 on a Montgomery curve and 
-  // a point P with 2 coefficients in coeff (computed in the function get_3_isog()).
-  // Inputs: projective points P = (X3:Z3) and Q = (X:Z).
-  // Output: the projective point Q <- phi(Q) = (X3:Z3). 
+{// Computes the 3-isogeny R=phi(X:Z), given projective point (X3:Z3) of order 3 on a Montgomery curve and 
+ // a point P with 2 coefficients in coeff (computed in the function get_3_isog()).
+ // Inputs: projective points P = (X3:Z3) and Q = (X:Z) in the new data representation based on the unconventional radix.
+ // Output: the projective point Q <- phi(Q) = (X3:Z3) in the new data representation based on the unconventional radix. 
     f2elm_t t0, t1, t2;
 	f2elm_t t3, t4, t5;
 
@@ -275,9 +275,9 @@ void j_inv(const f2elm_t A, const f2elm_t Ai, const f2elm_t C, const f2elm_t Ci,
 
 
 void xDBLADD(point_proj_t P, point_proj_t Q, const f2elm_t xPQ, const f2elm_t xPQi, const f2elm_t A24, const f2elm_t A24i)
-{ // Simultaneous doubling and differential addition.
-  // Input: projective Montgomery points P=(XP:ZP) and Q=(XQ:ZQ) such that xP=XP/ZP and xQ=XQ/ZQ, affine difference xPQ=x(P-Q) and Montgomery curve constant A24=(A+2)/4.
-  // Output: projective Montgomery points P <- 2*P = (X2P:Z2P) such that x(2P)=X2P/Z2P, and Q <- P+Q = (XQP:ZQP) such that = x(Q+P)=XQP/ZQP. 
+{// Simultaneous doubling and differential addition.
+ // Input: projective points P=(XP:ZP) and Q=(XQ:ZQ) such that xP=XP/ZP and xQ=XQ/ZQ, affine difference xPQ=x(P-Q) and Montgomery curve constant A24=(A+2)/4.
+ // Output: projective points P <- 2*P = (X2P:Z2P) such that x(2P)=X2P/Z2P, and Q <- P+Q = (XQP:ZQP) such that = x(Q+P)=XQP/ZQP, in the new data representation. 
     f2elm_t t0, t1, t2, t3, t4, t5;
 
     fp2add_new(P->X, P->Xi, P->Z, P->Zi, t0, t1);                         // t0 = XP+ZP
@@ -379,23 +379,6 @@ static void LADDER3PT(const f2elm_t xP, const f2elm_t xPi, const f2elm_t xQ, con
         mask = 0 - (digit_t)swap;
 
         swap_points(R, R2, mask);
-		
-		//	normal2_t c;
-	    //    from_fp2uRadix(R->Z, R->Zi, c);
-	    //    printf("\n");
-	    //    for(i=0;i<10;i++){
-	    //    	printf("R->Z0 c[%d] = %#018llx \n;",i,c[0][i]);
-	    //    	printf("R->Z1 c[%d] = %#018llx \n;",i,c[1][i]);
-	    //    };
-	    //    printf("\n");
-		//	
-		//	from_fp2uRadix(R2->Z, R2->Zi, c);
-	    //    printf("\n");
-	    //    for(i=0;i<10;i++){
-	    //    	printf("R2->Z0 c[%d] = %#018llx \n;",i,c[0][i]);
-	    //    	printf("R2->Z1 c[%d] = %#018llx \n;",i,c[1][i]);
-	    //    };
-	    //    printf("\n");
 		
         xDBLADD(R0, R2, R->X, R->Xi, A24, A24i);
         fp2mul_uRadix(R2->X, R2->Xi, R->Z, R->Zi, R2->X, R2->Xi);

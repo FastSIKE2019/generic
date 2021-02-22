@@ -47,14 +47,20 @@ void fp2zero(f2elm_t a)
 
 
 void fp2div2(const f2elm_t a, const f2elm_t ai, f2elm_t c, f2elm_t ci)          
-{ // GF(p^2) division by two, c = a/2  in GF(p^2).
+{// GF(p^2) division by two, c = a/2  in GF(p^2).
+ // Inputs : a = a0 + a1*i, a0 and a1 in uncoventional radix representation, meet the same requirement with fpmul_new & fpsqr_new
+ // Output : c = c0 + c1*i, c = a/2; c0 & c1 in uncoventional radix representation, meet the same requirement with fpmul_new & fpsqr_new
+
     fpdiv2_434_new(a[1], a[0], c[0], c[1]);
     fpdiv2_434_new(ai[1], ai[0], ci[0], ci[1]);
 }
 
 
 void fp2inv_uRadix(f2elm_t a, f2elm_t ai)
-{// GF(p^2) inversion using Montgomery arithmetic, a = (a0-i*a1)/(a0^2+a1^2).
+{// GF(p^2) inversion in GF(p^2), a = (a0-i*a1)/(a0^2+a1^2).
+ // Inputs : a = a0 + a1*i, a0 and a1 in uncoventional radix representation, meet the same requirement with fpmul_new & fpsqr_new
+ // Output : a = a0 + a1*i, a0 & a1 in uncoventional radix representation, meet the same requirement with fpmul_new & fpsqr_new
+
     f2elm_t t1, t2;
 
     fpsqr(a[1], a[0], t1[0], t1[1]);                      // t10 = a0^2
@@ -68,8 +74,7 @@ void fp2inv_uRadix(f2elm_t a, f2elm_t ai)
 
 
 void to_fp2uRadix(const normal2_t a, f2elm_t mc, f2elm_t mci)
-{ // Conversion of a GF(p^2) element to Montgomery representation,
-  // mc_i = a_i*R^2*R^(-1) = a_i*R in GF(p^2). 
+{// Conversion of a GF(p^2) element from the normal representation to the new data representation based on the unconventional radix.
 
     to_uRadix(a[0], mc[0], mc[1]);
     to_uRadix(a[1], mci[0], mci[1]);
@@ -77,8 +82,7 @@ void to_fp2uRadix(const normal2_t a, f2elm_t mc, f2elm_t mci)
 
 
 void from_fp2uRadix(const f2elm_t a, const f2elm_t ai, normal2_t c)
-{ // Conversion of a GF(p^2) element from Montgomery representation to standard representation,
-  // c_i = ma_i*R^(-1) = a_i in GF(p^2).
+{ // Conversion of a GF(p^2) element from the new data representation based on the unconventional radix to normal representation.
 
     from_uRadix(a[1], a[0], c[0]);
     from_uRadix(ai[1], ai[0], c[1]);

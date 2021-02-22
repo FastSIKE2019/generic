@@ -38,7 +38,7 @@ static void init_basis(digit_t *gen, f2elm_t XP0, f2elm_t XP1, f2elm_t XQ0, f2el
 
 
 static void fp2_encode(const f2elm_t x, const f2elm_t xi, unsigned char *enc)
-{ // Conversion of GF(p^2) element from Montgomery to standard representation, and encoding by removing leading 0 bytes
+{ // Conversion of GF(p^2) element from new data representation to standard representation
     unsigned int i;
     normal2_t t;
 
@@ -51,7 +51,7 @@ static void fp2_encode(const f2elm_t x, const f2elm_t xi, unsigned char *enc)
 
 
 static void fp2_decode(const unsigned char *enc, f2elm_t y, f2elm_t yi)
-{ // Parse byte sequence back into GF(p^2) element, and conversion to Montgomery representation
+{ // Parse byte sequence back into GF(p^2) element, and conversion from the standard field to new data representation based on the unconventional radix
     unsigned int i; normal2_t x;
 
     for (i = 0; i < 2*(MAXBITS_FIELD / 8); i++) ((unsigned char *)x)[i] = 0;
@@ -194,22 +194,6 @@ int EphemeralKeyGeneration_B(const unsigned char* PrivateKeyB, unsigned char* Pu
 	
     // Retrieve kernel point
     LADDER3PT(XPB0, XPB1, XQB0, XQB1, XRB0, XRB1, (digit_t*)PrivateKeyB, BOB, R, A, Ai);
-    
-//	normal2_t c;
-//	from_fp2uRadix(R->X, R->Xi, c);
-//	printf("\n");
-//	for(i=0;i<10;i++){
-//		printf("R->X0 c[%d] = %#018llx \n;",i,c[0][i]);
-//		printf("R->X1 c[%d] = %#018llx \n;",i,c[1][i]);
-//	};
-//	printf("\n");
-//	from_fp2uRadix(R->Z, R->Zi, c);
-//	printf("\n");
-//	for(i=0;i<10;i++){
-//		printf("R->Z0 c[%d] = %#018llx \n;",i,c[0][i]);
-//		printf("R->Z1 c[%d] = %#018llx \n;",i,c[1][i]);
-//	};
-//	printf("\n");
 	
     // Traverse tree
     index = 0;  
@@ -278,26 +262,9 @@ int EphemeralSecretAgreement_A(const unsigned char* PrivateKeyA, const unsigned 
     fp2_decode(PublicKeyB + 2*FP2_ENCODED_BYTES, PKB[4], PKB[5]);
 	
 	normal2_t c;
-//	from_fp2uRadix(PKB[4], PKB[5], c);
-//	printf("\n");
-//	for(i=0;i<10;i++){
-//		printf("PKB0 c[%d] = %#018llx \n;",i,c[0][i]);
-//		printf("PKB1 c[%d] = %#018llx \n;",i,c[1][i]);
-//	};
-//	printf("\n");
-	
 
     // Initialize constants: A24plus = A+2C, C24 = 4C, where C=1
     get_A(PKB[0], PKB[1], PKB[2], PKB[3], PKB[4], PKB[5], A, Ai);
-	
-
-//	from_fp2uRadix(A, Ai, c);
-//	printf("\n");
-//	for(i=0;i<10;i++){
-//		printf("A0 c[%d] = %#018llx \n;",i,c[0][i]);
-//		printf("A1 c[%d] = %#018llx \n;",i,c[1][i]);
-//	};
-//	printf("\n");
 	
     fp_add_new(zero[0], (digit_t*)&uRadix_one, zero[0], (digit_t*)&uRadix_one, C24[0], C24[1]);
     fp2add_new(A, Ai, C24, C24i, A24plus, A24plusi);

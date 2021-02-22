@@ -55,19 +55,19 @@ ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
     EXTRA_OBJECTS_503=objs503/fp_generic.o
     EXTRA_OBJECTS_610=objs610/fp_generic.o
     EXTRA_OBJECTS_751=objs751/fp_generic.o
-    EXTRA_OBJECTS_751_uRadix=src/P751_uRadix/P751/generic/fp_generic.o
-    EXTRA_OBJECTS_503_uRadix=src/P503_uRadix/P503/generic/fp_generic.o
-	EXTRA_OBJECTS_434_uRadix=src/P434_uRadix/P434/generic/fp_generic.o
-	EXTRA_OBJECTS_610_uRadix=src/P610_uRadix/P610/generic/fp_generic.o
+    EXTRA_OBJECTS_751_uRadix=objs751uRadix/fp_generic.o
+    EXTRA_OBJECTS_503_uRadix=objs503uRadix/fp_generic.o
+	EXTRA_OBJECTS_434_uRadix=objs434uRadix/fp_generic.o
+	EXTRA_OBJECTS_610_uRadix=objs610uRadix/fp_generic.o
 endif
 OBJECTS_434=objs434/P434.o $(EXTRA_OBJECTS_434) objs/random.o objs/fips202.o
 OBJECTS_503=objs503/P503.o $(EXTRA_OBJECTS_503) objs/random.o objs/fips202.o
 OBJECTS_610=objs610/P610.o $(EXTRA_OBJECTS_610) objs/random.o objs/fips202.o
 OBJECTS_751=objs751/P751.o $(EXTRA_OBJECTS_751) objs/random.o objs/fips202.o
-OBJECTS_751_uRadix=src/P751_uRadix/P751/generic/P751.o $(EXTRA_OBJECTS_751_uRadix) objs/random.o objs/fips202.o
-OBJECTS_503_uRadix=src/P503_uRadix/P503/generic/P503.o $(EXTRA_OBJECTS_503_uRadix) objs/random.o objs/fips202.o
-OBJECTS_434_uRadix=src/P434_uRadix/P434/generic/P434.o $(EXTRA_OBJECTS_434_uRadix) objs/random.o objs/fips202.o
-OBJECTS_610_uRadix=src/P610_uRadix/P610/generic/P610.o $(EXTRA_OBJECTS_610_uRadix) objs/random.o objs/fips202.o
+OBJECTS_751_uRadix=objs751uRadix/P751.o $(EXTRA_OBJECTS_751_uRadix) objs/random.o objs/fips202.o
+OBJECTS_503_uRadix=objs503uRadix/P503.o $(EXTRA_OBJECTS_503_uRadix) objs/random.o objs/fips202.o
+OBJECTS_434_uRadix=objs434uRadix/P434.o $(EXTRA_OBJECTS_434_uRadix) objs/random.o objs/fips202.o
+OBJECTS_610_uRadix=objs610uRadix/P610.o $(EXTRA_OBJECTS_610_uRadix) objs/random.o objs/fips202.o
 
 all: lib434 lib503 lib610 lib751 tests KATS lib751uRadix lib503uRadix lib610uRadix lib434uRadix
 
@@ -87,6 +87,22 @@ objs751/%.o: src/P751_Mont/P751/%.c
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) $< -o $@
 
+objs751uRadix/%.o: src/P751_uRadix/P751/%.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+objs503uRadix/%.o: src/P503_uRadix/P503/%.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
+	
+objs434uRadix/%.o: src/P434_uRadix/P434/%.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+objs610uRadix/%.o: src/P610_uRadix/P610/%.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
+
 ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"		
     objs434/fp_generic.o: src/P434_Mont/P434/generic/fp_generic.c
 	    $(CC) -c $(CFLAGS) src/P434_Mont/P434/generic/fp_generic.c -o objs434/fp_generic.o
@@ -100,6 +116,17 @@ ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
     objs751/fp_generic.o: src/P751_Mont/P751/generic/fp_generic.c
 	    $(CC) -c $(CFLAGS) src/P751_Mont/P751/generic/fp_generic.c -o objs751/fp_generic.o
 
+    objs751uRadix/fp_generic.o: src/P751_uRadix/P751/generic/fp_generic.c
+	    $(CC) -c $(CFLAGS) src/P751_uRadix/P751/generic/fp_generic.c -o objs751uRadix/fp_generic.o
+
+    objs503uRadix/fp_generic.o: src/P503_uRadix/P503/generic/fp_generic.c
+	    $(CC) -c $(CFLAGS) src/P503_uRadix/P503/generic/fp_generic.c -o objs503uRadix/fp_generic.o
+		
+    objs434uRadix/fp_generic.o: src/P434_uRadix/P434/generic/fp_generic.c
+	    $(CC) -c $(CFLAGS) src/P434_uRadix/P434/generic/fp_generic.c -o objs434uRadix/fp_generic.o
+
+    objs610uRadix/fp_generic.o: src/P610_uRadix/P610/generic/fp_generic.c
+	    $(CC) -c $(CFLAGS) src/P610_uRadix/P610/generic/fp_generic.c -o objs610uRadix/fp_generic.o
 endif
 
 objs/random.o: src/random/random.c
